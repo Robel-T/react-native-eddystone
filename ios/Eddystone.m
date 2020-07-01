@@ -121,19 +121,19 @@
 
       // dispatch device event with beacon information
       [self sendEventWithName:eventName
-                         body:@{
-                                @"id": [NSString stringWithFormat:@"%@", beacon.id],
-                                @"uid": [peripheral.identifier UUIDString],
-                                @"txPower": beacon.txPower,
-                                @"rssi": beacon.rssi
-                                }];
+                         body:[NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSString stringWithFormat:@"%@", beacon.id],@"id",
+                               [peripheral.identifier UUIDString],@"uid",
+                               beacon.txPower,@"txPower",
+                               beacon.rssi,@"rssi",
+                               nil]];
+                                
     } else if(frameType == FrameTypeURL) {
       // retrive the URL from the beacon broadcast & dispatch
       NSURL *url = [Beacon getUrl:serviceData];
-      [self sendEventWithName:@"onURLFrame" body:@{
-                                                  @"uid": [peripheral.identifier UUIDString],
-                                                   @"url": url.absoluteString
-                                                   }];
+        [self sendEventWithName:@"onURLFrame" body:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                    [peripheral.identifier UUIDString],@"uid",
+                                                    url.absoluteString,@"url",nil]];
     } else if (frameType == FrameTypeTelemetry) {
       // retrieve the beacon data
       NSData *beaconData = [Beacon getData:serviceData];
@@ -150,11 +150,10 @@
           temp /= 256.f;
           
           // dispatch telemetry information
-          [self sendEventWithName:@"onTelemetryFrame" body:@{
-                                                             @"uid": [peripheral.identifier UUIDString],
-                                                             @"voltage": [NSNumber numberWithInt: voltage],
-                                                             @"temp": [NSNumber numberWithInt: temp]
-                                                             }];
+            [self sendEventWithName:@"onTelemetryFrame" body:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                              [peripheral.identifier UUIDString],@"uid",
+                                                              [NSNumber numberWithInt: voltage],@"voltage",
+                                                              [NSNumber numberWithInt: temp],@"temp",nil]];
         }
       }
 
