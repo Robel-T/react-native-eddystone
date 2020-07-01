@@ -126,7 +126,7 @@
     // read the bytes where UID data should be
     uint8_t frameType;
     [beaconData getBytes:&frameType length:1];
-    if (frameType != FrameTypeEID) {
+    if (frameType != FRAME_TYPE_EID) {
       return nil;
     }
     
